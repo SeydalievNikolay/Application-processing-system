@@ -8,6 +8,7 @@ import org.seydaliev.applicationprocessingsystem.model.User;
 import org.seydaliev.applicationprocessingsystem.repository.RoleRepository;
 import org.seydaliev.applicationprocessingsystem.repository.UserRepository;
 import org.seydaliev.applicationprocessingsystem.service.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,16 +18,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements org.seydaliev.applicationprocessingsystem.service.UserService {
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private UserMapper userMapper;
 
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserRepository userRepository1, RoleRepository roleRepository1, UserMapper userMapper) {
-        this.userRepository = userRepository1;
-        this.roleRepository = roleRepository1;
-        this.userMapper = userMapper;
-    }
 
     public Page<UserDto> getUsersforPage(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);

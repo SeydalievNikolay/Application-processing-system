@@ -1,33 +1,48 @@
 package org.seydaliev.applicationprocessingsystem.service.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+
 import org.seydaliev.applicationprocessingsystem.dto.UserDto;
 import org.seydaliev.applicationprocessingsystem.model.Role;
 import org.seydaliev.applicationprocessingsystem.model.User;
+import org.seydaliev.applicationprocessingsystem.repository.RoleRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
-public interface UserMapper {
-    @Mapping(source = "roles", target = "roles", qualifiedByName = "mapRolesToString")
-    UserDto toDto (User user);
-    @Mapping(source = "roles", target = "roles", qualifiedByName = "mapRolesToString")
-    User toEntity(UserDto userDto);
+@Component
+public class UserMapper {
 
-    @Named("mapRolesToString")
-    static Set<String> mapRolesToString(Set<Role> roles) {
+    private final RoleRepository roleRepository;
+
+    public UserMapper(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
+
+    public UserDto toDto(User user){
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setName(user.getName());
+        userDto.setRoles(mapRolesToString(user.getRoles()));
+        return userDto;
+    }
+    public User toEntity(UserDto userDto){
+        User user = new User();
+        user.setId(userDto.getId());
+        user.setName(userDto.getName());
+        user.setRoles(mapRolesToRoleSet(userDto.getRoles()));
+        return user;
+    }
+
+    private Set<String> mapRolesToString(Set<Role> roles) {
         return roles.stream()
                 .map(Role::getName)
                 .collect(Collectors.toSet());
     }
 
-    @Named("mapRolesToRoleSet")
-    static Set<Role> mapRolesToRoleSet(Set<String> roles) {
+    public Set<Role> mapRolesToRoleSet(Set<String> roles) {
         return roles.stream()
-                .map(String::)
+                .flatMap(roleName -> roleRepository.findByName(roleName).stream())
                 .collect(Collectors.toSet());
     }
 }

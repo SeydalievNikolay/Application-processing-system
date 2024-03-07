@@ -1,18 +1,10 @@
 package org.seydaliev.applicationprocessingsystem.service.impl;
 
 import org.seydaliev.applicationprocessingsystem.dto.ApplicationDto;
-import org.seydaliev.applicationprocessingsystem.dto.UserDto;
-import org.seydaliev.applicationprocessingsystem.exception.RoleNotFoundException;
-import org.seydaliev.applicationprocessingsystem.exception.UserNotFoundException;
 import org.seydaliev.applicationprocessingsystem.model.Application;
-import org.seydaliev.applicationprocessingsystem.model.Role;
-import org.seydaliev.applicationprocessingsystem.model.User;
 import org.seydaliev.applicationprocessingsystem.repository.ApplicationRepository;
-import org.seydaliev.applicationprocessingsystem.repository.RoleRepository;
-import org.seydaliev.applicationprocessingsystem.repository.UserRepository;
 import org.seydaliev.applicationprocessingsystem.service.AdminService;
 import org.seydaliev.applicationprocessingsystem.service.mapper.ApplicationMapper;
-import org.seydaliev.applicationprocessingsystem.service.mapper.UserMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

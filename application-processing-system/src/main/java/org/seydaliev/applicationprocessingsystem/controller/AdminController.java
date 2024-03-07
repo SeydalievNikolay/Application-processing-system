@@ -2,12 +2,8 @@ package org.seydaliev.applicationprocessingsystem.controller;
 
 import org.seydaliev.applicationprocessingsystem.dto.ApplicationDto;
 import org.seydaliev.applicationprocessingsystem.dto.UserDto;
-import org.seydaliev.applicationprocessingsystem.model.Application;
-import org.seydaliev.applicationprocessingsystem.repository.ApplicationRepository;
 import org.seydaliev.applicationprocessingsystem.service.AdminService;
-import org.seydaliev.applicationprocessingsystem.service.ApplicationService;
 import org.seydaliev.applicationprocessingsystem.service.UserService;
-import org.seydaliev.applicationprocessingsystem.service.mapper.ApplicationMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
