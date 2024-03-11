@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/init/create_role.yml
+  - include:
+      file: liquibase/init/create_user.yml
+  - include:
+      file: liquibase/init/create_application.yml
+  - include:
+      file: liquibase/init/create_user_roles.yml
