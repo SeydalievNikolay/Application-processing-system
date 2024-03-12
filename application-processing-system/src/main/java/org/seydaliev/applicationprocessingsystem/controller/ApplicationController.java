@@ -8,7 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/applications")
+@RequestMapping("/api/v1/applications")
 public class ApplicationController {
     private final ApplicationService applicationService;
 

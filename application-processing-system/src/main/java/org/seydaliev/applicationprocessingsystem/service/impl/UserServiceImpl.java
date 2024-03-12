@@ -9,8 +9,10 @@ import org.seydaliev.applicationprocessingsystem.repository.RoleRepository;
 import org.seydaliev.applicationprocessingsystem.repository.UserRepository;
 import org.seydaliev.applicationprocessingsystem.service.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +26,8 @@ public class UserServiceImpl implements org.seydaliev.applicationprocessingsyste
     private RoleRepository roleRepository;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
 
@@ -43,9 +47,13 @@ public class UserServiceImpl implements org.seydaliev.applicationprocessingsyste
         return userMapper.toDto(userRepository.save(user));
     }
 
-    public UserDto createUser(UserDto userDTO) {
+    public void createUser(UserDto userDTO) {
+        if (userRepository.existsByName(userDTO.getName())) {
+            throw new DataIntegrityViolationException("User with this name already exists");
+        }
         User user = userMapper.toEntity(userDTO);
-        return userMapper.toDto(userRepository.save(user));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userMapper.toDto(userRepository.save(user));
     }
 
     public UserDto assignRole(Long userId) {

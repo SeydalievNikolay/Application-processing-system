@@ -7,6 +7,6 @@ import java.util.Set;
 public class UserDto {
     private Long id;
     private String name;
-    private String email;
-    private Set<String> roles;
+    private String password;
+    private Set<RoleDto> roles;
 }

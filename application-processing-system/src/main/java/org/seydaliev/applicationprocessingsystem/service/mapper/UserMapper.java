@@ -1,6 +1,8 @@
 package org.seydaliev.applicationprocessingsystem.service.mapper;
 
 
+import jakarta.persistence.EntityNotFoundException;
+import org.seydaliev.applicationprocessingsystem.dto.RoleDto;
 import org.seydaliev.applicationprocessingsystem.dto.UserDto;
 import org.seydaliev.applicationprocessingsystem.model.Role;
 import org.seydaliev.applicationprocessingsystem.model.User;
@@ -23,26 +25,35 @@ public class UserMapper {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setName(user.getName());
-        userDto.setRoles(mapRolesToString(user.getRoles()));
+        userDto.setPassword(user.getPassword());
+        userDto.setRoles(mapRolesToRoleDtoSet(user.getRoles()));
         return userDto;
     }
+
     public User toEntity(UserDto userDto){
         User user = new User();
         user.setId(userDto.getId());
         user.setName(userDto.getName());
-        user.setRoles(mapRolesToRoleSet(userDto.getRoles()));
+        user.setPassword(userDto.getPassword());
+        user.setRoles(mapRoleDtoSetToRoleSet(userDto.getRoles()));
         return user;
     }
 
-    private Set<String> mapRolesToString(Set<Role> roles) {
+    private Set<RoleDto> mapRolesToRoleDtoSet(Set<Role> roles) {
         return roles.stream()
-                .map(Role::getName)
+                .map(role -> {
+                    RoleDto roleDto = new RoleDto();
+                    roleDto.setId(role.getId());
+                    roleDto.setName(role.getName());
+                    return roleDto;
+                })
                 .collect(Collectors.toSet());
     }
 
-    public Set<Role> mapRolesToRoleSet(Set<String> roles) {
-        return roles.stream()
-                .flatMap(roleName -> roleRepository.findByName(roleName).stream())
+    public Set<Role> mapRoleDtoSetToRoleSet(Set<RoleDto> roleDtos) {
+        return roleDtos.stream()
+                .map(roleDto -> roleRepository.findById(roleDto.getId())
+                        .orElseThrow(() -> new EntityNotFoundException("Role not found")))
                 .collect(Collectors.toSet());
     }
 }
